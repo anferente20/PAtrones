@@ -1,0 +1,6 @@
+FACTORY METHOD 
+
+- Seleccionar el tipo de output
+- Ingresar como texto el mensaje que se va a registrar
+- Registrar el mensaje
+
