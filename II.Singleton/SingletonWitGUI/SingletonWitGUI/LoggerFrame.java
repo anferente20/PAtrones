@@ -144,7 +144,7 @@ class ButtonHandler implements ActionListener {
 	      System.exit(1);
 	    }
 	    if (e.getActionCommand().equals(LoggerFrame.LOG_MESSAGE)) {
-	      //get input values
+	      //get input values	
 	      String message = objLoggerFrame.getMessage();
 	      String outputType = objLoggerFrame.getOutputType();
 	      if (outputType=="ON") {
