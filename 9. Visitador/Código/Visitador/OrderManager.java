@@ -4,7 +4,10 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import com.sun.java.swing.plaf.windows.*;
+
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+
+
 
 public class OrderManager extends JFrame {
   public static final String newline = "\n";
