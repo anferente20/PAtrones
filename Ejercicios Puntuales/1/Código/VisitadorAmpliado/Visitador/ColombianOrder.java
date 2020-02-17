@@ -9,9 +9,9 @@ public class ColombianOrder implements Order{
 	public ColombianOrder() {
 	}
 	
-	public ColombianOrder(double inp_orderAmount,double inp_fourxThousand) {
+	public ColombianOrder(double inp_orderAmount) {
 		orderAmount = inp_orderAmount;
-		fourxThousand = inp_fourxThousand;
+		fourxThousand = inp_orderAmount*0.004;
 	}
 	
 	

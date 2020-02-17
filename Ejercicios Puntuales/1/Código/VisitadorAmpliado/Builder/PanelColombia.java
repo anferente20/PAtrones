@@ -31,6 +31,7 @@ public class PanelColombia implements PanelBuilder {
 		
 		txtFourxThousand = new JTextField();
 		txtFourxThousand.setBounds(200, 49, 258, 19);
+		txtFourxThousand.setEditable(false);
 		this.pnlColombianOrder.add(txtFourxThousand);
 		txtFourxThousand.setColumns(10);
 	}
