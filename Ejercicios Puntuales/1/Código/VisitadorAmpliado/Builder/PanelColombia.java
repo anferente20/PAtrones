@@ -25,12 +25,12 @@ public class PanelColombia implements PanelBuilder {
 		this.pnlColombianOrder.add(lblSH);
 		
 		txtAmount = new JTextField();
-		txtAmount.setBounds(293, 14, 273, 19);
+		txtAmount.setBounds(200, 14, 258, 19);
 		this.pnlColombianOrder.add(txtAmount);
 		txtAmount.setColumns(10);
 		
 		txtFourxThousand = new JTextField();
-		txtFourxThousand.setBounds(293, 49, 273, 19);
+		txtFourxThousand.setBounds(200, 49, 258, 19);
 		this.pnlColombianOrder.add(txtFourxThousand);
 		txtFourxThousand.setColumns(10);
 	}

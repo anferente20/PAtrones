@@ -21,7 +21,7 @@ public class PanelNoCalifornia implements PanelBuilder {
 		this.pnlNonCaliforniaOrder.add(lblAmount);
 		
 		txtAmount = new JTextField();
-		txtAmount.setBounds(293, 14, 273, 19);
+		txtAmount.setBounds(200, 14, 258, 19);
 		this.pnlNonCaliforniaOrder.add(txtAmount);
 		txtAmount.setColumns(10);
 	}

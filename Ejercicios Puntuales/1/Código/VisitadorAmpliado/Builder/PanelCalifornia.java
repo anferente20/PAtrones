@@ -26,12 +26,12 @@ public class PanelCalifornia implements PanelBuilder {
 		this.pnlCaliforniaOrder.add(lblTax);
 		
 		txtAmount = new JTextField();
-		txtAmount.setBounds(293, 14, 273, 19);
+		txtAmount.setBounds(200, 14, 258, 19);
 		this.pnlCaliforniaOrder.add(txtAmount);
 		txtAmount.setColumns(10);
 		
 		txtTax = new JTextField();
-		txtTax.setBounds(293, 45, 273, 19);
+		txtTax.setBounds(200, 45, 258, 19);
 		this.pnlCaliforniaOrder.add(txtTax);
 		txtTax.setColumns(10);
 	}

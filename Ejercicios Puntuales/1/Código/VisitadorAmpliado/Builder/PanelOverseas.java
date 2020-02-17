@@ -17,20 +17,20 @@ public class PanelOverseas implements PanelBuilder{
 		this.pnlOverseasOrder.setLayout(null);
 		
 		JLabel lblAmount = new JLabel("Monto de la orden");
-		lblAmount.setBounds(12, 12, 263, 23);
+		lblAmount.setBounds(12, 12, 302, 15);
 		this.pnlOverseasOrder.add(lblAmount);
 		
 		JLabel lblSH = new JLabel("S & H adicional");
-		lblSH.setBounds(12, 47, 263, 23);
+		lblSH.setBounds(12, 47,302, 15);
 		this.pnlOverseasOrder.add(lblSH);
 		
 		txtAmount = new JTextField();
-		txtAmount.setBounds(293, 14, 273, 19);
+		txtAmount.setBounds(200, 14, 258, 19);
 		this.pnlOverseasOrder.add(txtAmount);
 		txtAmount.setColumns(10);
 		
 		txtSH = new JTextField();
-		txtSH.setBounds(293, 49, 273, 19);
+		txtSH.setBounds(200, 49, 258, 19);
 		this.pnlOverseasOrder.add(txtSH);
 		txtSH.setColumns(10);
 	}
