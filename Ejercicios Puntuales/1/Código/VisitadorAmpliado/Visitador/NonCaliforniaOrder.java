@@ -1,3 +1,4 @@
+package Visitador;
 public class NonCaliforniaOrder implements Order {
   private double orderAmount;
 

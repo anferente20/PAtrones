@@ -1,3 +1,4 @@
+package Visitador;
 public class CaliforniaOrder implements Order {
   private double orderAmount;
   private double additionalTax;
