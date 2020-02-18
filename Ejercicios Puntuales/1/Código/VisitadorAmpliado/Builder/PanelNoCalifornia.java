@@ -4,6 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Visitador.NonCaliforniaOrder;
 import Visitador.Order;
 
 public class PanelNoCalifornia implements PanelBuilder {
@@ -21,7 +22,7 @@ public class PanelNoCalifornia implements PanelBuilder {
 		this.pnlNonCaliforniaOrder.add(lblAmount);
 		
 		txtAmount = new JTextField();
-		txtAmount.setBounds(200, 14, 258, 19);
+		txtAmount.setBounds(200, 14, 250, 19);
 		this.pnlNonCaliforniaOrder.add(txtAmount);
 		txtAmount.setColumns(10);
 	}
@@ -40,8 +41,11 @@ public class PanelNoCalifornia implements PanelBuilder {
 
 	@Override
 	public Order getOrder() {
-		// TODO Auto-generated method stub
-		return null;
+		double amount = new Double(this.txtAmount.getText()).doubleValue();
+		if (amount >= 0) {
+			return new NonCaliforniaOrder(amount);
+		}
+		throw new IllegalArgumentException();
 	}
 
 }

@@ -11,6 +11,7 @@ import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import Builder.BuilderFactory;
 import Builder.PanelBuilder;
 import Builder.PanelDirector;
+import Iterator.AllOrders;
 
 
 
@@ -58,7 +59,7 @@ public class OrderManager extends JFrame {
 		
 		btnExit.setBounds(179, 394, 147, 25);
 		btnGetTotal.setBounds(12, 394, 155, 25);
-		btnCreateOrder.setBounds(12, 357, 155, 25);
+		btnCreateOrder.setBounds(12, 300, 155, 25);
 
 		labelL.setBounds(344, 357, 246, 25);
 		lblOrderType.setBounds(12, 12, 302, 15);
@@ -106,15 +107,7 @@ public class OrderManager extends JFrame {
   public String getOrderType() {
     return (String) cmbOrderType.getSelectedItem();
   }
-  public String getOrderAmount() {
-    return txtOrderAmount.getText();
-  }
-  public String getTax() {
-    return txtAdditionalTax.getText();
-  }
-  public String getSH() {
-    return txtAdditionalSH.getText();
-  }
+  
   public JComboBox getCmbOrderType() {
 		return this.cmbOrderType;
 	}
@@ -129,7 +122,7 @@ public class OrderManager extends JFrame {
 
 class ButtonHandler implements ActionListener {
 	private OrderManager manager;
-
+	private AllOrders allOrders;
 	private PanelBuilder panel;
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
@@ -140,31 +133,15 @@ class ButtonHandler implements ActionListener {
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)
         ) {
       //get input values
-      String orderType = manager.getOrderType();
-      String strOrderAmount =
-        manager.getOrderAmount();
-      String strTax = manager.getTax();
-      String strSH = manager.getSH();
+    	
+    	Order order = this.panel.getOrder();
+    	
+    	allOrders.add(order);
+     
 
-      double dblOrderAmount = 0.0;
-      double dblTax = 0.0;
-      double dblSH = 0.0;
+     
 
-      if (strOrderAmount.trim().length() == 0) {
-        strOrderAmount = "0.0";
-      }
-      if (strTax.trim().length() == 0) {
-        strTax = "0.0";
-      }
-      if (strSH.trim().length() == 0) {
-        strSH = "0.0";
-      }
-
-      dblOrderAmount =
-        new Double(strOrderAmount).doubleValue();
-      dblTax = new Double(strTax).doubleValue();
-      dblSH = new Double(strSH).doubleValue();
-/**
+     /**
       //Create the order
       Order order = createOrder(orderType, dblOrderAmount,
                     dblTax, dblSH);
@@ -218,6 +195,7 @@ class ButtonHandler implements ActionListener {
   }
   public ButtonHandler(OrderManager inObjOrderManager) {
     manager = inObjOrderManager;
+    allOrders = new AllOrders();
   }
 
 } // End of class ButtonHandler

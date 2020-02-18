@@ -4,6 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Visitador.ColombianOrder;
 import Visitador.Order;
 
 public class PanelColombia implements PanelBuilder {
@@ -25,12 +26,12 @@ public class PanelColombia implements PanelBuilder {
 		this.pnlColombianOrder.add(lblSH);
 		
 		txtAmount = new JTextField();
-		txtAmount.setBounds(200, 14, 258, 19);
+		txtAmount.setBounds(200, 14, 250, 19);
 		this.pnlColombianOrder.add(txtAmount);
 		txtAmount.setColumns(10);
 		
 		txtFourxThousand = new JTextField();
-		txtFourxThousand.setBounds(200, 49, 258, 19);
+		txtFourxThousand.setBounds(200, 49, 250, 19);
 		txtFourxThousand.setEditable(false);
 		this.pnlColombianOrder.add(txtFourxThousand);
 		txtFourxThousand.setColumns(10);
@@ -51,8 +52,12 @@ public class PanelColombia implements PanelBuilder {
 
 	@Override
 	public Order getOrder() {
-		// TODO Auto-generated method stub
-		return null;
+		double amount = new Double(this.txtAmount.getText()).doubleValue();
+		txtFourxThousand.setText(String.valueOf(amount*0.004));
+		if (amount >= 0 ) {
+			return new ColombianOrder(amount);
+		}
+		throw new IllegalArgumentException();
 	}
 
 }
