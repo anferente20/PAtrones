@@ -3,9 +3,9 @@ package Builder;
 public class BuilderFactory {
 
 	public final static String NONE = "";
-	public static final String CA_ORDER = "Orden de california";
+	public static final String CA_ORDER = "Orden de California";
 	public static final String NON_CA_ORDER = "Orden para fuera de California";
-	public static final String OVERSEAS_ORDER = "Orden internacional";
+	public static final String OVERSEAS_ORDER = "Orden Internacional";
 	public static final String COLOMBIAN_ORDER = "Orden para Colombia";
 	
 	public static PanelBuilder getPanel(String panel) {
