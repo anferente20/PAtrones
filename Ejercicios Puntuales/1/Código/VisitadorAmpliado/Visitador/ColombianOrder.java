@@ -16,7 +16,7 @@ public class ColombianOrder implements Order{
 	
 	
 	@Override
-	public void accept(OrderVisitor v) {
+	public void accept(VisitorInterface v) {
 		v.visit(this);
 		
 	}

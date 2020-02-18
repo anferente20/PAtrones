@@ -26,7 +26,8 @@ public class AdministratorOrders implements Iterator{
 	
 	public Object next() {
 		if (hasNext()) {
-			return ec.nextElement();
+			nextOrder = (Order)ec.nextElement();
+			return nextOrder;
 		}else {
 			throw new NoSuchElementException();
 		}		

@@ -5,6 +5,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
@@ -24,13 +25,10 @@ public class OrderManager extends JFrame {
 
   private JComboBox cmbOrderType;
   private JPanel pnlOrder;
-  private JTextField txtOrderAmount, txtAdditionalTax,
-  txtAdditionalSH;
-  private JLabel lblOrderType, lblOrderAmount;
-  private JLabel lblAdditionalTax, lblAdditionalSH;
+  private JScrollPane scrlTable;
   private JLabel lblTotal, lblTotalValue;
+  private JTable tblOrders;
 
-  private OrderVisitor objVisitor;
 
   public OrderManager() {
 	  super("Ordenes de envio");
@@ -47,7 +45,9 @@ public class OrderManager extends JFrame {
 		this.cmbOrderType.addItem(BuilderFactory.OVERSEAS_ORDER);
 		this.cmbOrderType.addItem(BuilderFactory.COLOMBIAN_ORDER);
 		this.pnlOrder = new JPanel(new GridLayout(1,1));
-		
+		this.scrlTable = new JScrollPane();
+		this.tblOrders = new JTable();
+		scrlTable.setViewportView(this.tblOrders);
 		this.lblTotalValue = new JLabel("");
 		ButtonHandler objButtonHandler = new ButtonHandler(this);
 		
@@ -57,22 +57,22 @@ public class OrderManager extends JFrame {
 
 		cmbOrderType.addActionListener(objButtonHandler);
 		
-		btnExit.setBounds(179, 394, 147, 25);
-		btnGetTotal.setBounds(12, 394, 155, 25);
-		btnCreateOrder.setBounds(12, 300, 155, 25);
+		btnExit.setBounds(105, 380, 147, 25);
+		btnGetTotal.setBounds(179, 350, 155, 25);
+		btnCreateOrder.setBounds(12, 350, 155, 25);
 
-		labelL.setBounds(344, 357, 246, 25);
+		labelL.setBounds(344, 350, 246, 25);
 		lblOrderType.setBounds(12, 12, 302, 15);
 		this.cmbOrderType.setBounds(200, 7, 258, 24);
 		this.pnlOrder.setBounds(12, 39, 578, 111);
-
-		this.lblTotalValue.setBounds(344, 394, 246, 24);
+		this.scrlTable.setBounds(12, 164, 578, 181);
+		this.lblTotalValue.setBounds(344, 380, 246, 24);
 		
 		getContentPane().setLayout(null);
 		getContentPane().add(this.cmbOrderType);
 		getContentPane().add(lblOrderType);
 		getContentPane().add(this.pnlOrder);
-
+		getContentPane().add(this.scrlTable);
 		getContentPane().add(btnExit);
 		getContentPane().add(btnCreateOrder);
 		getContentPane().add(btnGetTotal);
@@ -94,16 +94,14 @@ public class OrderManager extends JFrame {
                            );
 
     //frame.pack();
-    frame.setSize(500, 400);
+    frame.setSize(610,460);
     frame.setVisible(true);
   }
 
   public void setTotalValue(String msg) {
     lblTotalValue.setText(msg);
   }
-  public OrderVisitor getOrderVisitor() {
-    return objVisitor;
-  }
+  
   public String getOrderType() {
     return (String) cmbOrderType.getSelectedItem();
   }
@@ -118,6 +116,9 @@ public class OrderManager extends JFrame {
 		this.pnlOrder.setBounds(12, 39, 578, 111);
 		this.validate();
 	}
+  public void setDataTable(DefaultTableModel dtm) {
+		this.tblOrders.setModel(dtm);
+  }
 } // End of class OrderManager
 
 class ButtonHandler implements ActionListener {
@@ -125,7 +126,6 @@ class ButtonHandler implements ActionListener {
 	private AllOrders allOrders;
 	private PanelBuilder panel;
   public void actionPerformed(ActionEvent e) {
-    String totalResult = null;
 
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
@@ -135,36 +135,20 @@ class ButtonHandler implements ActionListener {
       //get input values
     	
     	Order order = this.panel.getOrder();
-    	
+    	System.out.println(order.getClass().getName());
     	allOrders.add(order);
-     
-
-     
-
-     /**
-      //Create the order
-      Order order = createOrder(orderType, dblOrderAmount,
-                    dblTax, dblSH);
-**/
-      //Get the Visitor
-      OrderVisitor visitor =
-        manager.getOrderVisitor();
-
-     /** // accept the visitor instance
-      order.accept(visitor);
-**/
+    	VisitorTable visitor = new VisitorTable();
+		this.allOrders.accept(visitor);
+		this.manager.setDataTable(visitor.getTableModel());
       manager.setTotalValue(
         " Order Created Successfully");
     }
 
     if (e.getActionCommand().equals(OrderManager.GET_TOTAL)) {
       //Get the Visitor
-      OrderVisitor visitor =
-        manager.getOrderVisitor();
-      totalResult = new Double(
-                      visitor.getOrderTotal()).toString();
-      totalResult = " Orders Total = " + totalResult;
-      manager.setTotalValue(totalResult);
+      OrderVisitor visitor = new OrderVisitor();
+      allOrders.accept(visitor);
+      manager.setTotalValue(String.valueOf(visitor.getOrderTotal()));
     }
     if (e.getSource() == manager.getCmbOrderType()) {
 		String orderType = manager.getOrderType();
