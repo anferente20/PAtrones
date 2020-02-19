@@ -30,6 +30,10 @@ public class AllOrders implements Order {
 	public Order getElement(int id) {
 		return (Order) this.data.elementAt(id);
 	}
+	
+	public void replace(int id, Object obj) {
+		this.data.setElementAt(obj, id);
+	}
 
 	@Override
 	public void accept(VisitorInterface v) {

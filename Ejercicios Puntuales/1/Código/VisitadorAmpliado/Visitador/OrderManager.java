@@ -20,6 +20,8 @@ public class OrderManager extends JFrame {
   public static final String newline = "\n";
   public static final String GET_TOTAL = "Get Total";
   public static final String CREATE_ORDER = "Create Order";
+  public static final String MODIFY_ORDER = "Modify Order";
+  public static final String SAVE_CHANGE = "Save Change";
   public static final String EXIT = "Exit";
   
 
@@ -28,7 +30,7 @@ public class OrderManager extends JFrame {
   private JScrollPane scrlTable;
   private JLabel lblTotal, lblTotalValue;
   private JTable tblOrders;
-
+  private JButton btnSaveChange;
 
   public OrderManager() {
 	  super("Ordenes de envio");
@@ -36,6 +38,8 @@ public class OrderManager extends JFrame {
 		JButton btnExit = new JButton(OrderManager.EXIT);
 		JButton btnGetTotal = new JButton(OrderManager.GET_TOTAL);
 		JButton btnCreateOrder = new JButton(OrderManager.CREATE_ORDER);
+		JButton btnModifyOrder = new JButton(OrderManager.MODIFY_ORDER); 
+		btnSaveChange = new JButton(OrderManager.SAVE_CHANGE);
 
 		JLabel labelL = new JLabel("Liquidacion de ordenes:");
 		JLabel lblOrderType = new JLabel("Tipo de orden:");
@@ -54,13 +58,18 @@ public class OrderManager extends JFrame {
 		btnExit.addActionListener(objButtonHandler);
 		btnGetTotal.addActionListener(objButtonHandler);
 		btnCreateOrder.addActionListener(objButtonHandler);
-
+		btnModifyOrder.addActionListener(objButtonHandler);
+		btnSaveChange.addActionListener(objButtonHandler);
+		btnSaveChange.setEnabled(false);
+		
 		cmbOrderType.addActionListener(objButtonHandler);
 		
-		btnExit.setBounds(105, 380, 147, 25);
+		btnExit.setBounds(12, 380, 147, 25);
 		btnGetTotal.setBounds(179, 350, 155, 25);
 		btnCreateOrder.setBounds(12, 350, 155, 25);
-
+		btnModifyOrder.setBounds(179, 380, 155, 25);
+		btnSaveChange.setBounds(90, 410, 155, 25);
+		
 		labelL.setBounds(344, 350, 246, 25);
 		lblOrderType.setBounds(12, 12, 302, 15);
 		this.cmbOrderType.setBounds(200, 7, 258, 24);
@@ -76,6 +85,8 @@ public class OrderManager extends JFrame {
 		getContentPane().add(btnExit);
 		getContentPane().add(btnCreateOrder);
 		getContentPane().add(btnGetTotal);
+		getContentPane().add(btnModifyOrder);
+		getContentPane().add(btnSaveChange);
 		getContentPane().add(labelL);
 		getContentPane().add(this.lblTotalValue);
 
@@ -94,7 +105,7 @@ public class OrderManager extends JFrame {
                            );
 
     //frame.pack();
-    frame.setSize(610,460);
+    frame.setSize(610,500);
     frame.setVisible(true);
   }
 
@@ -109,6 +120,9 @@ public class OrderManager extends JFrame {
   public JComboBox getCmbOrderType() {
 		return this.cmbOrderType;
 	}
+  public JButton getBtnSaveChanges() {
+	  return this.btnSaveChange;
+  }
   public void displayNewUI(JPanel panel) {
 		this.pnlOrder.removeAll();
 		this.pnlOrder.add(panel);
@@ -125,6 +139,7 @@ class ButtonHandler implements ActionListener {
 	private OrderManager manager;
 	private AllOrders allOrders;
 	private PanelBuilder panel;
+	private int id ;
   public void actionPerformed(ActionEvent e) {
 
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
@@ -157,6 +172,46 @@ class ButtonHandler implements ActionListener {
 		director.build();
 		this.manager.displayNewUI(this.panel.getPanel());
 	}
+    if(e.getActionCommand().equals(OrderManager.MODIFY_ORDER)) { 
+    	manager.getBtnSaveChanges().setEnabled(true);
+    	manager.getCmbOrderType().setEnabled(false);
+    	
+    	id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID de la"
+    			+ " orden que desea modificar"));
+    	id--;
+    	
+    	Order order= allOrders.getElement(id);
+    	
+    	String type = order.getClass().getName();
+    	type = type.substring(10);
+    	
+    	if(type.equals("CaliforniaOrder")) {
+    		this.panel = BuilderFactory.getPanel(BuilderFactory.CA_ORDER);
+    	}
+		if(type.equals("NonCaliforniaOrder")) {
+			this.panel = BuilderFactory.getPanel(BuilderFactory.NON_CA_ORDER);		
+		}
+		if(type.equals("OverseasOrder")) {
+			this.panel = BuilderFactory.getPanel(BuilderFactory.OVERSEAS_ORDER);
+		}
+		if(type.equals("ColombianOrder")) {			
+			this.panel = BuilderFactory.getPanel(BuilderFactory.COLOMBIAN_ORDER);		
+		}
+		
+		PanelDirector director = new PanelDirector(this.panel);
+		director.build();
+		this.manager.displayNewUI(this.panel.getPanel());				
+    }
+    if(e.getActionCommand().equals(OrderManager.SAVE_CHANGE)) {
+    	Order order = this.panel.getOrder();
+    	System.out.println(order.getClass().getName());
+    	allOrders.replace(this.id, order);
+    	VisitorTable visitor = new VisitorTable();
+		this.allOrders.accept(visitor);
+		this.manager.setDataTable(visitor.getTableModel());
+		
+		manager.getCmbOrderType().setEnabled(false);
+    }
   }
 /**
   public Order createOrder(String orderType,
