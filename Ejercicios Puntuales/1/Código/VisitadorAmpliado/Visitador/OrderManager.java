@@ -209,8 +209,8 @@ class ButtonHandler implements ActionListener {
     	VisitorTable visitor = new VisitorTable();
 		this.allOrders.accept(visitor);
 		this.manager.setDataTable(visitor.getTableModel());
-		
-		manager.getCmbOrderType().setEnabled(false);
+		this.manager.getBtnSaveChanges().setEnabled(false);
+		manager.getCmbOrderType().setEnabled(true);
     }
   }
 /**
