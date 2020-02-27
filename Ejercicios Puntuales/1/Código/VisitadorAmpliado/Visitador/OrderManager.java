@@ -31,13 +31,15 @@ public class OrderManager extends JFrame {
   private JLabel lblTotal, lblTotalValue;
   private JTable tblOrders;
   private JButton btnSaveChange;
+  private JButton btnGetTotal;
+  private JButton btnCreateOrder;
 
   public OrderManager() {
 	  super("Ordenes de envio");
 		
 		JButton btnExit = new JButton(OrderManager.EXIT);
-		JButton btnGetTotal = new JButton(OrderManager.GET_TOTAL);
-		JButton btnCreateOrder = new JButton(OrderManager.CREATE_ORDER);
+		btnGetTotal = new JButton(OrderManager.GET_TOTAL);
+		btnCreateOrder = new JButton(OrderManager.CREATE_ORDER);
 		JButton btnModifyOrder = new JButton(OrderManager.MODIFY_ORDER); 
 		btnSaveChange = new JButton(OrderManager.SAVE_CHANGE);
 
@@ -123,6 +125,12 @@ public class OrderManager extends JFrame {
   public JButton getBtnSaveChanges() {
 	  return this.btnSaveChange;
   }
+  public JButton getBtnCreateOrder() {
+	  return this.btnCreateOrder;
+  }
+  public JButton getBtnGetTotal() {
+	  return this.btnGetTotal;
+  }
   public void displayNewUI(JPanel panel) {
 		this.pnlOrder.removeAll();
 		this.pnlOrder.add(panel);
@@ -139,9 +147,10 @@ class ButtonHandler implements ActionListener {
 	private OrderManager manager;
 	private AllOrders allOrders;
 	private PanelBuilder panel;
-	private int id ;
+	private int id =1;
+	
+	private String changeType;
   public void actionPerformed(ActionEvent e) {
-
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
     }
@@ -149,14 +158,19 @@ class ButtonHandler implements ActionListener {
         ) {
       //get input values
     	
+    	
+    	id = allOrders.getTamano()+1;
+    	
     	Order order = this.panel.getOrder();
-    	System.out.println(order.getClass().getName());
+
+    	order.setID(id);
     	allOrders.add(order);
     	VisitorTable visitor = new VisitorTable();
 		this.allOrders.accept(visitor);
 		this.manager.setDataTable(visitor.getTableModel());
-      manager.setTotalValue(
+		manager.setTotalValue(
         " Order Created Successfully");
+      	id++;
     }
 
     if (e.getActionCommand().equals(OrderManager.GET_TOTAL)) {
@@ -165,6 +179,7 @@ class ButtonHandler implements ActionListener {
       allOrders.accept(visitor);
       manager.setTotalValue(String.valueOf(visitor.getOrderTotal()));
     }
+    
     if (e.getSource() == manager.getCmbOrderType()) {
 		String orderType = manager.getOrderType();
 		this.panel = BuilderFactory.getPanel(orderType);
@@ -173,63 +188,63 @@ class ButtonHandler implements ActionListener {
 		this.manager.displayNewUI(this.panel.getPanel());
 	}
     if(e.getActionCommand().equals(OrderManager.MODIFY_ORDER)) { 
-    	manager.getBtnSaveChanges().setEnabled(true);
-    	manager.getCmbOrderType().setEnabled(false);
     	
+    	changeType = "";
+    	
+    	try {
     	id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID de la"
     			+ " orden que desea modificar"));
+
     	id--;
     	
-    	Order order= allOrders.getElement(id);
-    	
-    	String type = order.getClass().getName();
-    	type = type.substring(10);
-    	
-    	if(type.equals("CaliforniaOrder")) {
-    		this.panel = BuilderFactory.getPanel(BuilderFactory.CA_ORDER);
-    	}
-		if(type.equals("NonCaliforniaOrder")) {
-			this.panel = BuilderFactory.getPanel(BuilderFactory.NON_CA_ORDER);		
-		}
-		if(type.equals("OverseasOrder")) {
-			this.panel = BuilderFactory.getPanel(BuilderFactory.OVERSEAS_ORDER);
-		}
-		if(type.equals("ColombianOrder")) {			
-			this.panel = BuilderFactory.getPanel(BuilderFactory.COLOMBIAN_ORDER);		
-		}
-		
-		PanelDirector director = new PanelDirector(this.panel);
-		director.build();
-		this.manager.displayNewUI(this.panel.getPanel());				
+	    	try {
+	    		Order order= allOrders.getElement(id);	    		
+	        	String type = order.getClass().getName();
+	        	type = type.substring(10);
+	        	
+	        	if(type.equals("CaliforniaOrder")) {
+	        		changeType = BuilderFactory.CA_ORDER;
+	        	}
+	    		if(type.equals("NonCaliforniaOrder")) {
+	    			changeType = BuilderFactory.NON_CA_ORDER;		
+	    		}
+	    		if(type.equals("OverseasOrder")) {
+	    			changeType = BuilderFactory.OVERSEAS_ORDER;
+	    		}
+	    		if(type.equals("ColombianOrder")) {			
+	    			changeType = BuilderFactory.COLOMBIAN_ORDER;		
+	    		}
+	    		this.panel = BuilderFactory.getPanel(changeType);
+	    		
+	    		PanelDirector director = new PanelDirector(this.panel);
+	    		director.build();
+	    		this.manager.displayNewUI(this.panel.getPanel());
+	    		manager.getBtnSaveChanges().setEnabled(true);
+	        	manager.getCmbOrderType().setEnabled(false);
+	        	manager.getBtnCreateOrder().setEnabled(false);
+	        	manager.getBtnGetTotal().setEnabled(false);
+	    	}catch(ArrayIndexOutOfBoundsException ex) {
+	    		JOptionPane.showMessageDialog(null, "El ID ingresado no corresponde a ninguna orden registrada.");
+	    	};
+    	}catch(NumberFormatException nf) {
+    		JOptionPane.showMessageDialog(null, "El ID ingresado no es numérico");
+    	}    	    	    
+    					
     }
     if(e.getActionCommand().equals(OrderManager.SAVE_CHANGE)) {
     	Order order = this.panel.getOrder();
-    	System.out.println(order.getClass().getName());
-    	allOrders.replace(this.id, order);
+    	order.setID(id+1);
+    	allOrders.replace(id, order);
     	VisitorTable visitor = new VisitorTable();
 		this.allOrders.accept(visitor);
 		this.manager.setDataTable(visitor.getTableModel());
 		this.manager.getBtnSaveChanges().setEnabled(false);
 		manager.getCmbOrderType().setEnabled(true);
+		manager.getBtnCreateOrder().setEnabled(true);
+    	manager.getBtnGetTotal().setEnabled(true);
     }
   }
-/**
-  public Order createOrder(String orderType,
-      double orderAmount, double tax, double SH) {
-    if (orderType.equalsIgnoreCase(OrderManager.CA_ORDER)) {
-      return new CaliforniaOrder(orderAmount, tax);
-    }
-    if (orderType.equalsIgnoreCase(
-      OrderManager.NON_CA_ORDER)) {
-      return new NonCaliforniaOrder(orderAmount);
-    }
-    if (orderType.equalsIgnoreCase(
-          OrderManager.OVERSEAS_ORDER)) {
-      return new OverseasOrder(orderAmount, SH);
-    }
-    return null;
-  }
-**/
+
   public ButtonHandler() {
   }
   public ButtonHandler(OrderManager inObjOrderManager) {

@@ -4,7 +4,7 @@ public class ColombianOrder implements Order{
  
 	private double orderAmount;
 	private double fourxThousand;
-	
+	private int ID;
 	
 	public ColombianOrder() {
 	}
@@ -20,11 +20,16 @@ public class ColombianOrder implements Order{
 		v.visit(this);
 		
 	}
+	public int getID() {
+		  return this.ID;
+	  }
 	
 	public double getOrderAmount() {
 	    return orderAmount;
 	 }
-
+	 public void setID(int id) {
+		  this.ID = id;
+	 }
 	public double getFourxThousand() {
 	    return fourxThousand;
 	 }

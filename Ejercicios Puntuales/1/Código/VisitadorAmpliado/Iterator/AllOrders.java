@@ -30,7 +30,9 @@ public class AllOrders implements Order {
 	public Order getElement(int id) {
 		return (Order) this.data.elementAt(id);
 	}
-	
+	public int getTamano() {
+		return this.data.size();
+	}
 	public void replace(int id, Object obj) {
 		this.data.setElementAt(obj, id);
 	}
@@ -42,6 +44,12 @@ public class AllOrders implements Order {
 			Order order = (Order) e.nextElement();
 			order.accept(v);
 		}
+	}
+
+	@Override
+	public void setID(int ID) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
