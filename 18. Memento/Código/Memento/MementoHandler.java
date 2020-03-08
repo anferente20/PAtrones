@@ -22,7 +22,6 @@ public class MementoHandler {
 
       } catch (Exception e) {
         System.out.println("Error Reading Memento");
-        System.out.println(e.getCause());
         System.exit(1);
       }
       //delete the old memento

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class DataConverter {
+public class DataConverter implements java.io.Serializable{
   public static final String DATA_FILE = "Data.txt";
   public static final String OUTPUT_FILE = "SQL.txt";
 
