@@ -1,0 +1,3 @@
+
+A message to log from Logger2
+A message to log from Logger1
